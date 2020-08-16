@@ -22,6 +22,7 @@ variable "image" {
 
 variable "ssh_keys" {
   type = list
+  default = ["sam@sambuntu"]
 }
 
 provider "hcloud" {
