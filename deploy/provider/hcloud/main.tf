@@ -20,11 +20,6 @@ variable "image" {
   type = string
 }
 
-variable "ssh_keys" {
-  type = list
-  default = ["sam@sambuntu"]
-}
-
 provider "hcloud" {
   token = var.token
 }
@@ -34,12 +29,16 @@ variable "apt_packages" {
   default = []
 }
 
+data "hcloud_ssh_key" "ssh_key" {
+  fingerprint = "f5:15:39:cf:12:7a:80:97:a7:2d:d7:91:cf:17:a1:35"
+}
+
 resource "hcloud_server" "host" {
   name        = format(var.hostname_format, count.index + 1)
   location    = var.location
   image       = var.image
   server_type = var.type
-  ssh_keys    = var.ssh_keys
+  ssh_keys    = ["${data.hcloud_ssh_key.ssh_key.id}"]
 
   count = var.hosts
 
